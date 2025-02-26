@@ -17,7 +17,7 @@
         <RootNamespace>$(AssemblyName)</RootNamespace>
 
         <!-- https://spdx.org/licenses/ -->
-        <PackageLicenseExpression>CC-BY-NC-ND-4.0</PackageLicenseExpression>
+        <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
 
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/AndreyMrovol/LethalNoCompanyPenalties/</RepositoryUrl>
