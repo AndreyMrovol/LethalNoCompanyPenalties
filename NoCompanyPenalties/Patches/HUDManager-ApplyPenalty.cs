@@ -1,4 +1,5 @@
 using System;
+using BepInEx.Configuration;
 using HarmonyLib;
 
 namespace NoCompanyPenalties.Patches
@@ -13,9 +14,18 @@ namespace NoCompanyPenalties.Patches
 		{
 			try
 			{
-				Plugin.logger.LogInfo($"Money before penalty: {MrovLib.ContentManager.Terminal.groupCredits}");
+				Plugin.logger.LogDebug($"Money before penalty: {MrovLib.ContentManager.Terminal.groupCredits}");
 
 				SelectableLevel currentLevel = StartOfRound.Instance.currentLevel;
+				if (ConfigManager.CompanyMoonConfigs.TryGetValue(currentLevel, out ConfigEntry<bool> configEntry) || !configEntry.Value)
+				{
+					// skip penalty application
+					Plugin.logger.LogWarning(
+						$"Penalties on company moon {MrovLib.SharedMethods.GetAlphanumericName(currentLevel)} are enabled!"
+					);
+					return true;
+				}
+
 				if (MrovLib.LevelHelper.CompanyMoons.Contains(currentLevel))
 				{
 					Plugin.logger.LogDebug("Company moon detected!");
@@ -42,15 +52,15 @@ namespace NoCompanyPenalties.Patches
 		{
 			try
 			{
-				Plugin.logger.LogInfo($"Money after penalty: {MrovLib.ContentManager.Terminal.groupCredits}");
+				Plugin.logger.LogDebug($"Money after penalty: {MrovLib.ContentManager.Terminal.groupCredits}");
 
 				SelectableLevel currentLevel = StartOfRound.Instance.currentLevel;
 				if (MrovLib.LevelHelper.CompanyMoons.Contains(currentLevel))
 				{
-					Plugin.logger.LogMessage("Company moon detected!");
+					Plugin.logger.LogDebug("Company moon detected!");
 
-					Plugin.logger.LogMessage("playersDead: " + playersDead);
-					Plugin.logger.LogMessage("bodiesInsured: " + bodiesInsured);
+					Plugin.logger.LogDebug("playersDead: " + playersDead);
+					Plugin.logger.LogDebug("bodiesInsured: " + bodiesInsured);
 				}
 			}
 			catch (Exception ex)

@@ -1,4 +1,5 @@
-﻿using BepInEx;
+﻿using System.Collections.Generic;
+using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 
@@ -15,8 +16,28 @@ namespace NoCompanyPenalties
 			logger = Logger;
 			harmony.PatchAll();
 
+			ConfigManager.Init(Config);
+
+			MrovLib.EventManager.TerminalStart.AddListener(GenerateConfigs);
+
 			// Plugin startup logic
 			Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
+		}
+
+		private void GenerateConfigs(Terminal terminal)
+		{
+			List<SelectableLevel> CompanyMoons = [];
+			foreach (SelectableLevel level in MrovLib.LevelHelper.CompanyMoons)
+			{
+				string moonName = MrovLib.SharedMethods.GetAlphanumericName(level);
+
+				ConfigManager.CompanyMoonConfigs[level] = ConfigManager.configFile.Bind(
+					"Company Moons",
+					$"{moonName}",
+					false,
+					$"Should penalties be applied on {moonName}?"
+				);
+			}
 		}
 	}
 }
