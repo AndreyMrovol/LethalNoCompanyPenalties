@@ -17,7 +17,7 @@ namespace NoCompanyPenalties.Patches
 				Plugin.logger.LogDebug($"Money before penalty: {MrovLib.ContentManager.Terminal.groupCredits}");
 
 				SelectableLevel currentLevel = StartOfRound.Instance.currentLevel;
-				if (ConfigManager.CompanyMoonConfigs.TryGetValue(currentLevel, out ConfigEntry<bool> configEntry) || !configEntry.Value)
+				if (ConfigManager.CompanyMoonConfigs.TryGetValue(currentLevel, out ConfigEntry<bool> configEntry) && configEntry.Value)
 				{
 					// skip penalty application
 					Plugin.logger.LogWarning(

@@ -1,3 +1,7 @@
+# 0.0.4
+
+- fixed a bug where penalties were not prevented correctly
+
 # 0.0.3
 
 - added config options to enable penalties for certain moons
